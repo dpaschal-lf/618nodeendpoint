@@ -1,10 +1,10 @@
 
 
 const express = require('express'); //load the code for the express server
-const mysql = require('mysql');
-const credentials = require('./mysqlcredentials.js');
+const mysql = require('mysql'); //load the code for mysql
+const credentials = require('./mysqlcredentials.js'); //load the credential object from mysqlcredentials.js
 
-const connection = mysql.createConnection( credentials );
+const connection = mysql.createConnection( credentials ); //establish an initial connection to db
 
 const server = express(); //build the webserver
 
@@ -13,21 +13,22 @@ server.use( express.static(__dirname + '/html'));
 
 //on the listening port, look for a URL of 'users' with a GET method, and call this function when it happens
 server.get('/users', (request, response)=>{
+	//setup the data object for sending back data
 	const output = {
 		success: false,
 		data: null
 	}
-	connection.connect(()=>{
-		connection.query('SELdsfdECT * FROM users', (error, data, fields)=>{
-			if(!error){
-				output.success = true;
+	connection.connect(()=>{ //connect to the DB based on current credentials
+		connection.query('SELdsfdECT * FROM users', (error, data, fields)=>{ //query the database and wait for response
+			if(!error){ //if there was no error
+				output.success = true; //change the data
 				output.data=data;
 
-			} else {
-				output.error = error;
+			} else { //there was an error
+				output.error = error; //add the error info to the output object
 			}
-			const json_output = JSON.stringify(output)
-			response.send(output);
+			const json_output = JSON.stringify(output) //convert the output object to a string
+			response.send(output); //response with the string
 		})
 
 	});
