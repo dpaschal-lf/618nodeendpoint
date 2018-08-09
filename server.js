@@ -13,7 +13,23 @@ server.use( express.static(__dirname + '/html'));
 
 //on the listening port, look for a URL of 'users' with a GET method, and call this function when it happens
 server.get('/users', (request, response)=>{
-	response.send('data!');
+	const output = {
+		success: false,
+		data: null
+	}
+	connection.connect(()=>{
+		connection.query('SELECT * FROM users', (error, data, fields)=>{
+			if(!error){
+				output.success = true;
+				output.data=data;
+				const jsonOutput = JSON.stringify(output);
+				response.send( jsonOutput );
+			} else {
+				response.send('whoops')
+			}
+		})
+	});
+
 })
 
 //tell the server to listen on port 3000, and when it finishes the start of listening, call this callback function
