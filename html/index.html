@@ -68,10 +68,11 @@ function getDataFromServer(){
 
 function getOneUserDataFromServer(id){
 	const options = {
-		url: 'getdata.php',
+		url: 'users',
 		data: {
 			user_id: id
 		},
+		method: 'get',
 		dataType: 'json',
 		success: function(response){
 			if(response.success){

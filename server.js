@@ -11,6 +11,8 @@ const server = express(); //build the webserver
 //use express to tell the server to use a static folder for generic URL requests that do not have specific handlers below
 server.use( express.static(__dirname + '/html')); 
 
+
+
 //on the listening port, look for a URL of 'users' with a GET method, and call this function when it happens
 server.get('/users', (request, response)=>{
 	//setup the data object for sending back data
@@ -19,7 +21,13 @@ server.get('/users', (request, response)=>{
 		data: null
 	}
 	connection.connect(()=>{ //connect to the DB based on current credentials
-		connection.query('SELdsfdECT * FROM users', (error, data, fields)=>{ //query the database and wait for response
+		let query = '';
+		if(request.query.user_id){
+			query = `SELECT * FROM users WHERE ID=${request.query.user_id}`;
+		} else {
+			query = 'SELECT ID, name, email, status FROM users';
+		}
+		connection.query(query, (error, data, fields)=>{ //query the database and wait for response
 			if(!error){ //if there was no error
 				output.success = true; //change the data
 				output.data=data;
