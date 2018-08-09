@@ -18,16 +18,18 @@ server.get('/users', (request, response)=>{
 		data: null
 	}
 	connection.connect(()=>{
-		connection.query('SELECT * FROM users', (error, data, fields)=>{
+		connection.query('SELdsfdECT * FROM users', (error, data, fields)=>{
 			if(!error){
 				output.success = true;
 				output.data=data;
-				const jsonOutput = JSON.stringify(output);
-				response.send( jsonOutput );
+
 			} else {
-				response.send('whoops')
+				output.error = error;
 			}
+			const json_output = JSON.stringify(output)
+			response.send(output);
 		})
+
 	});
 
 })
